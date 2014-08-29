@@ -81,8 +81,6 @@ class Laravel4ArtisanCommand(sublime_plugin.WindowCommand):
     def on_done(self):
         if os.name != 'posix':
             self.args = subprocess.list2cmdline(self.args)
-        # sublime.status_message(self.args);
-        # return;
         try:
             self.window.run_command("exec", {
                 "cmd": self.args,
