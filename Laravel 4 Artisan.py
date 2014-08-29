@@ -3,6 +3,7 @@ import shlex
 import subprocess
 import sublime
 import sublime_plugin
+import platform
 
 class Laravel4ArtisanCommand(sublime_plugin.WindowCommand):
     def __init__(self, *args, **kwargs):
@@ -21,7 +22,11 @@ class Laravel4ArtisanCommand(sublime_plugin.WindowCommand):
             if os.path.isfile("%s" % artisan_path):
                 self.command = kwargs.get('command', None)
                 if self.command == 'serveStop':
-                    self.command = 'taskkill /F /IM php.exe'
+                    plat = platform.system()
+                    if plat == 'Windows':
+                        self.command = 'taskkill /F /IM php.exe'
+                    else:
+                        self.command = 'killall php'
                     self.args = []
                 else:
                     self.args = [self.php_path, artisan_path]
@@ -63,7 +68,8 @@ class Laravel4ArtisanCommand(sublime_plugin.WindowCommand):
     def on_fields(self, fields):
         if fields != '':
             self.args.append('--fields=')
-            self.args.append(fields)
+            self.args.append(fields) ## When using multiple fields, we need quotes on the fields
+            self.args.append('-n')
             self.on_done()
         else:
             self.on_done()
@@ -75,6 +81,8 @@ class Laravel4ArtisanCommand(sublime_plugin.WindowCommand):
     def on_done(self):
         if os.name != 'posix':
             self.args = subprocess.list2cmdline(self.args)
+        # sublime.status_message(self.args);
+        # return;
         try:
             self.window.run_command("exec", {
                 "cmd": self.args,
