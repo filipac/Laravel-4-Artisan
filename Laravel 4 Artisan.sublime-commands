@@ -84,7 +84,16 @@
         "caption": "Laravel Artisan: Serve",
         "command": "laravel4_artisan",
         "args": {
-            "command": "serve"
+            "command": "serve",
+            "fill_in": true,
+            "fill_in_lable": "Enter the port"
+        }
+    },
+    {
+        "caption": "Laravel Artisan: Stop serving",
+        "command": "laravel4_artisan",
+        "args": {
+            "command": "serveStop",
         }
     },
     {

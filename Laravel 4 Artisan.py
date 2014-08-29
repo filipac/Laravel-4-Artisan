@@ -20,11 +20,15 @@ class Laravel4ArtisanCommand(sublime_plugin.WindowCommand):
 
             if os.path.isfile("%s" % artisan_path):
                 self.command = kwargs.get('command', None)
+                if self.command == 'serveStop':
+                    self.command = 'taskkill /F /IM php.exe'
+                    self.args = []
+                else:
+                    self.args = [self.php_path, artisan_path]
                 self.fill_in_accept = kwargs.get('fill_in', False)
                 self.fill_in_label = kwargs.get('fill_in_lable', 'Enter the resource name')
                 self.fields_accept = kwargs.get('fields', False)
                 self.fields_label = kwargs.get('fields_label', 'Enter the fields')
-                self.args = [self.php_path, artisan_path]
                 if self.command is None:
                     self.window.show_input_panel('Command name w/o args:', '', self.on_command_custom, None, None)
                 else:
@@ -38,11 +42,17 @@ class Laravel4ArtisanCommand(sublime_plugin.WindowCommand):
         self.args.extend(shlex.split(str(self.command)))
 
         if self.fill_in_accept is True:
-            self.window.show_input_panel(self.fill_in_label, "", self.on_fill_in, None, None)
+            sublime.status_message(self.fill_in_label);
+            if self.fill_in_label == 'Enter the port':
+                self.window.show_input_panel(self.fill_in_label, "8000", self.on_fill_in, None, None)
+            else:
+                self.window.show_input_panel(self.fill_in_label, "", self.on_fill_in, None, None)
         else:
             self.on_done()
 
     def on_fill_in(self, fill_in):
+        if self.fill_in_label == 'Enter the port':
+            fill_in = "--port=" + fill_in
         self.args.extend(shlex.split(str(fill_in)))
 
         if self.fields_accept is True:
