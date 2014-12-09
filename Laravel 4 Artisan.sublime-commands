@@ -104,10 +104,17 @@
         }
     },
     {
-        "caption": "Laravel Artisan: Auth: Reminders",
+        "caption": "Laravel Artisan: Auth:Reminders_Table",
         "command": "laravel4_artisan",
         "args": {
-            "command": "auth:reminders"
+            "command": "auth:reminders-table"
+        }
+    },
+    {
+        "caption": "Laravel Artisan: Auth:Reminders_Controller",
+        "command": "laravel4_artisan",
+        "args": {
+            "command": "auth:reminders-controller"
         }
     },
     {
